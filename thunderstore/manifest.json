@@ -1,0 +1,9 @@
+{
+  "name": "StorageSorter",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Sort every storage shelf with one key (F9). Orders boxes by category and product, merges partial boxes, and respects OrderAndOrganize category shelves. Host-side, multiplayer safe. English / Japanese.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}

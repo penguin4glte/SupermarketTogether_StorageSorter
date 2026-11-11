@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>StorageSorter</AssemblyName>
+    <RootNamespace>StorageSorter</RootNamespace>
+    <Version>1.0.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <DebugType>none</DebugType>
+
+  </PropertyGroup>
+
+  <!-- Local paths. Copy UserPaths.props.example to UserPaths.props (git-ignored) to override,
+       or pass -p:GameManaged=... -p:ProfileDir=... on the command line. -->
+  <Import Project="UserPaths.props" Condition="Exists('UserPaths.props')" />
+  <PropertyGroup>
+    <GameManaged Condition="'$(GameManaged)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Supermarket Together\Supermarket Together_Data\Managed</GameManaged>
+    <ProfileDir Condition="'$(ProfileDir)' == ''">$(APPDATA)\Thunderstore Mod Manager\DataFolder\SupermarketTogether\profiles\Default</ProfileDir>
+    <BepInExCore Condition="'$(BepInExCore)' == ''">$(ProfileDir)\BepInEx\core</BepInExCore>
+    <DeployDir>$(ProfileDir)\BepInEx\plugins\StorageSorter</DeployDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The test project lives in tests/ and builds separately. -->
+    <Compile Remove="tests\**" />
+    <None Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx"><HintPath>$(BepInExCore)\BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(BepInExCore)\0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameManaged)\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Mirror"><HintPath>$(GameManaged)\Mirror.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManaged)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(GameManaged)\UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="netstandard"><HintPath>$(GameManaged)\netstandard.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <LangFiles Include="lang\*.txt" />
+  </ItemGroup>
+
+  <!-- Opt-in: `dotnet build -p:DeployToProfile=true` copies the DLL into the profile for quick testing.
+       Off by default because the mod is now installed through Thunderstore (would load twice). -->
+  <Target Name="DeployToProfile" AfterTargets="Build" Condition="'$(DeployToProfile)' == 'true' And Exists('$(ProfileDir)')">
+    <MakeDir Directories="$(DeployDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DeployDir)" />
+    <Copy SourceFiles="@(LangFiles)" DestinationFolder="$(DeployDir)\lang" />
+    <Message Importance="high" Text="Deployed $(TargetFileName) -> $(DeployDir)" />
+  </Target>
+
+  <!-- Release builds also produce the Thunderstore upload zip in bin\thunderstore\. -->
+  <Target Name="PackageThunderstore" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <PkgRoot>$(MSBuildProjectDirectory)\bin\thunderstore</PkgRoot>
+      <PkgStage>$(PkgRoot)\stage</PkgStage>
+      <PkgZip>$(PkgRoot)\penguin4glte-StorageSorter-$(Version).zip</PkgZip>
+    </PropertyGroup>
+    <RemoveDir Directories="$(PkgStage)" />
+    <Copy SourceFiles="thunderstore\manifest.json;thunderstore\icon.png;README.md;CHANGELOG.md" DestinationFolder="$(PkgStage)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PkgStage)\plugins" />
+    <Copy SourceFiles="@(LangFiles)" DestinationFolder="$(PkgStage)\plugins\lang" />
+    <Delete Files="$(PkgZip)" />
+    <ZipDirectory SourceDirectory="$(PkgStage)" DestinationFile="$(PkgZip)" />
+    <Message Importance="high" Text="Thunderstore package -> $(PkgZip)" />
+  </Target>
+
+</Project>

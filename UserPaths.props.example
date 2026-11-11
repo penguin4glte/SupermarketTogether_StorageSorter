@@ -1,0 +1,12 @@
+<!--
+  Copy this file to UserPaths.props (git-ignored) and adjust the paths for your PC.
+  このファイルを UserPaths.props にコピーし、自分の PC のパスに書き換えてください（Git には含まれません）。
+-->
+<Project>
+  <PropertyGroup>
+    <!-- Folder containing Assembly-CSharp.dll, Mirror.dll, UnityEngine*.dll, netstandard.dll -->
+    <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Supermarket Together\Supermarket Together_Data\Managed</GameManaged>
+    <!-- Mod manager profile (BepInEx.dll and 0Harmony.dll are taken from <ProfileDir>\BepInEx\core) -->
+    <ProfileDir>$(APPDATA)\Thunderstore Mod Manager\DataFolder\SupermarketTogether\profiles\Default</ProfileDir>
+  </PropertyGroup>
+</Project>

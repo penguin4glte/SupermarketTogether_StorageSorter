@@ -1,0 +1,26 @@
+# StorageSorter translation template
+#
+# How to add a language:
+#   1. Copy this file in the same folder and rename it to <code>.txt (e.g. de.txt, zh.txt).
+#      Files whose name starts with "_" are ignored.
+#   2. Translate the text to the right of "=". Save as UTF-8.
+#   3. Set "Language = <code>" in BepInEx/config/penguin4glte.supermarkettogether.storagesorter.cfg.
+#
+# {0}, {1}, {2} are replaced with numbers/text. Keep them.
+# Wrap a value in "double quotes" to keep leading/trailing spaces. Use \n for a line break.
+# Missing keys fall back to English. A file named en.txt or ja.txt overrides the built-in text.
+
+host_only = Only the host can sort the storage.
+no_shelves = No storage shelves found.
+aborted = Storage sort aborted (check the BepInEx log).
+already_sorted = Storage is already sorted.
+error = An error occurred while sorting the storage (check the BepInEx log).
+
+# {0} = changed slots, {1} = sorted.category (or empty), {2} = sorted.merged (or empty)
+sorted = Storage sorted{1}: {0} slot(s) updated{2}
+sorted.category = " (category shelves first)"
+# {0} = boxes before, {1} = boxes after
+sorted.merged = ", boxes {0} → {1}"
+
+# {0} = number of boxes
+lost = Warning: {0} box(es) could not be placed. Check the BepInEx log.

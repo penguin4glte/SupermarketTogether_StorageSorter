@@ -1,0 +1,18 @@
+# Build output
+bin/
+obj/
+
+# Local paths (see UserPaths.props.example)
+UserPaths.props
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Never commit game or BepInEx binaries
+*.dll
+*.pdb
+*.zip
