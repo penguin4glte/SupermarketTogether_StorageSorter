@@ -3,6 +3,9 @@
 **English** | [日本語](#日本語)
 
 Sort every box in your storage room with a single key press.
+倉庫の箱を、キー 1 つで一気に並び替えます。
+
+Source code / ソースコード: https://github.com/penguin4glte/SupermarketTogether_StorageSorter
 
 ## English
 
